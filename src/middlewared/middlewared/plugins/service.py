@@ -83,6 +83,14 @@ class StartNotify(threading.Thread):
             tries += 1
 
 
+class ServiceModel(sa.Model):
+    __tablename__ = 'services_services'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    srv_service = sa.Column(sa.String(120))
+    srv_enable = sa.Column(sa.Boolean())
+
+
 class ServiceService(CRUDService):
 
     SERVICE_DEFS = {

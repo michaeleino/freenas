@@ -708,6 +708,17 @@ class UPSRemainingBatteryPlugin(RRDBase):
     )
 
 
+class ReportingModel(sa.Model):
+    __tablename__ = 'system_reporting'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    cpu_in_percentage = sa.Column(sa.Boolean())
+    graphite = sa.Column(sa.String(120))
+    graph_age = sa.Column(sa.Integer())
+    graph_points = sa.Column(sa.Integer())
+    graphite_separateinstances = sa.Column(sa.Boolean())
+
+
 class ReportingService(ConfigService):
 
     class Config:

@@ -39,6 +39,36 @@ FIRST_INSTALL_SENTINEL = '/data/first-boot'
 LICENSE_FILE = '/data/license'
 
 
+class SystemAdvancedModel(sa.Model):
+    __tablename__ = 'system_advanced'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    adv_consolemenu = sa.Column(sa.Boolean())
+    adv_serialconsole = sa.Column(sa.Boolean())
+    adv_serialport = sa.Column(sa.String(120))
+    adv_serialspeed = sa.Column(sa.String(120))
+    adv_powerdaemon = sa.Column(sa.Boolean())
+    adv_swapondrive = sa.Column(sa.Integer())
+    adv_consolemsg = sa.Column(sa.Boolean())
+    adv_traceback = sa.Column(sa.Boolean())
+    adv_advancedmode = sa.Column(sa.Boolean())
+    adv_autotune = sa.Column(sa.Boolean())
+    adv_debugkernel = sa.Column(sa.Boolean())
+    adv_uploadcrash = sa.Column(sa.Boolean())
+    adv_anonstats = sa.Column(sa.Boolean())
+    adv_anonstats_token = sa.Column(sa.Text())
+    adv_motd = sa.Column(sa.Text())
+    adv_boot_scrub = sa.Column(sa.Integer())
+    adv_fqdn_syslog = sa.Column(sa.Boolean())
+    adv_sed_user = sa.Column(sa.String(120))
+    adv_sed_passwd = sa.Column(sa.String(120))
+    adv_legacy_ui = sa.Column(sa.Boolean())
+    adv_sysloglevel = sa.Column(sa.String(120))
+    adv_syslogserver = sa.Column(sa.String(120))
+    adv_syslog_transport = sa.Column(sa.String(12))
+    adv_syslog_tls_certificate_id = sa.Column(sa.ForeignKey('system_certificate.id'), index=True, nullable=True)
+
+
 class SystemAdvancedService(ConfigService):
 
     class Config:
@@ -660,6 +690,28 @@ class SystemService(Service):
             with open(debug_job.result, 'rb') as f:
                 shutil.copyfileobj(f, job.pipes.output.w)
         job.pipes.output.w.close()
+
+
+class SystemGeneralModel(sa.Model):
+    __tablename__ = 'system_settings'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    stg_guiaddress = sa.Column(sa.Text())
+    stg_guiv6address = sa.Column(sa.Text())
+    stg_guiport = sa.Column(sa.Integer())
+    stg_guihttpsport = sa.Column(sa.Integer())
+    stg_guihttpsredirect = sa.Column(sa.Boolean())
+    stg_language = sa.Column(sa.String(120))
+    stg_kbdmap = sa.Column(sa.String(120))
+    stg_timezone = sa.Column(sa.String(120))
+    stg_wizardshown = sa.Column(sa.Boolean())
+    stg_pwenc_check = sa.Column(sa.String(100))
+    stg_guicertificate_id = sa.Column(sa.ForeignKey('system_certificate.id'), index=True, nullable=True)
+    stg_crash_reporting = sa.Column(sa.Boolean(), nullable=True)
+    stg_usage_collection = sa.Column(sa.Boolean(), nullable=True)
+    stg_guihttpsprotocols = sa.Column(sa.Text())
+
+    stg_guicertificate = relationship('SystemCertificate')
 
 
 class SystemGeneralService(ConfigService):

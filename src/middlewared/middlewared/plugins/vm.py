@@ -484,6 +484,30 @@ class VMSupervisor(object):
             return False
 
 
+class VMModel(sa.Model):
+    __tablename__ = 'vm_vm'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    name = sa.Column(sa.String(150))
+    description = sa.Column(sa.String(250))
+    vcpus = sa.Column(sa.Integer())
+    memory = sa.Column(sa.Integer())
+    autostart = sa.Column(sa.Boolean())
+    time = sa.Column(sa.String(5))
+    grubconfig = sa.Column(sa.Text(), nullable=True)
+    bootloader = sa.Column(sa.String(50))
+
+
+class VmDeviceModel(sa.Model):
+    __tablename__ = 'vm_device'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    dtype = sa.Column(sa.String(50))
+    attributes = sa.Column(sa.Text())
+    vm_id = sa.Column(sa.ForeignKey('vm_vm__old.id'), index=True)
+    order = sa.Column(sa.Integer(), nullable=True)
+
+
 class VMService(CRUDService):
 
     class Config:

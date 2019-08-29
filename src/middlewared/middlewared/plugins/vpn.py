@@ -185,6 +185,25 @@ class OpenVPN:
         return verrors, data
 
 
+class OpenVPNServerModel(sa.Model):
+    __tablename__ = 'services_openvpnserver'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    port = sa.Column(sa.Integer())
+    protocol = sa.Column(sa.String(4))
+    device_type = sa.Column(sa.String(4))
+    authentication_algorithm = sa.Column(sa.String(32), nullable=True)
+    tls_crypt_auth = sa.Column(sa.Text(), nullable=True)
+    cipher = sa.Column(sa.String(32), nullable=True)
+    compression = sa.Column(sa.String(32), nullable=True)
+    additional_parameters = sa.Column(sa.Text())
+    server_certificate_id = sa.Column(sa.ForeignKey('system_certificate__old.id'), index=True, nullable=True)
+    root_ca_id = sa.Column(sa.ForeignKey('system_certificateauthority__old.id'), index=True, nullable=True)
+    server = sa.Column(sa.String(45))
+    topology = sa.Column(sa.String(16), nullable=True)
+    netmask = sa.Column(sa.Integer())
+
+
 class OpenVPNServerService(SystemServiceService):
 
     class Config:
@@ -436,6 +455,24 @@ class OpenVPNServerService(SystemServiceService):
         await self._update_service(old_config, config)
 
         return await self.config()
+
+
+class OpenVPNClientModel(sa.Model):
+    __tablename__ = 'services_openvpnclient'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    port = sa.Column(sa.Integer())
+    protocol = sa.Column(sa.String(4))
+    device_type = sa.Column(sa.String(4))
+    nobind = sa.Column(sa.Boolean())
+    authentication_algorithm = sa.Column(sa.String(32), nullable=True)
+    tls_crypt_auth = sa.Column(sa.Text(), nullable=True)
+    cipher = sa.Column(sa.String(32), nullable=True)
+    compression = sa.Column(sa.String(32), nullable=True)
+    additional_parameters = sa.Column(sa.Text())
+    client_certificate_id = sa.Column(sa.ForeignKey('system_certificate__old.id'), index=True, nullable=True)
+    root_ca_id = sa.Column(sa.ForeignKey('system_certificateauthority__old.id'), index=True, nullable=True)
+    remote = sa.Column(sa.String(120))
 
 
 class OpenVPNClientService(SystemServiceService):

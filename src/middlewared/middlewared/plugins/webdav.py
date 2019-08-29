@@ -6,6 +6,17 @@ from middlewared.schema import accepts, Bool, Dict, Int, Patch, Str, ValidationE
 from middlewared.service import CRUDService, SystemServiceService, private
 
 
+class WebDAVSharingModel(sa.Model):
+    __tablename__ = 'sharing_webdav_share'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    webdav_name = sa.Column(sa.String(120))
+    webdav_comment = sa.Column(sa.String(120))
+    webdav_path = sa.Column(sa.String(255))
+    webdav_ro = sa.Column(sa.Boolean())
+    webdav_perm = sa.Column(sa.Boolean())
+
+
 class WebDAVSharingService(CRUDService):
 
     class Config:
@@ -141,6 +152,18 @@ class WebDAVSharingService(CRUDService):
         await self._service_change('webdav', 'reload')
 
         return response
+
+
+class WebDAVModel(sa.Model):
+    __tablename__ = 'services_webdav'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    webdav_protocol = sa.Column(sa.String(120))
+    webdav_tcpport = sa.Column(sa.Integer())
+    webdav_tcpportssl = sa.Column(sa.Integer())
+    webdav_password = sa.Column(sa.String(120))
+    webdav_htauth = sa.Column(sa.String(120))
+    webdav_certssl_id = sa.Column(sa.Integer(), nullable=True)
 
 
 class WebDAVService(SystemServiceService):

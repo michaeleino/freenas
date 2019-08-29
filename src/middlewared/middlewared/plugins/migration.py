@@ -17,6 +17,13 @@ def load_migrations(middleware):
     return sorted(modules, key=lambda module: module.__name__)
 
 
+class MigrationModel(sa.Model):
+    __tablename__ = 'system_migration'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    name = sa.Column(sa.String(255))
+
+
 class MigrationService(Service):
 
     class Config:

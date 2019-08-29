@@ -349,6 +349,18 @@ class AuthService(Service):
         return True
 
 
+class TwoFactorAuthModel(sa.Model):
+    __tablename__ = 'system_twofactorauthentication'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    otp_digits = sa.Column(sa.Integer())
+    secret = sa.Column(sa.String(16), nullable=True)
+    window = sa.Column(sa.Integer())
+    interval = sa.Column(sa.Integer())
+    services = sa.Column(sa.Text())
+    enabled = sa.Column(sa.Boolean())
+
+
 class TwoFactorAuthService(ConfigService):
 
     class Config:

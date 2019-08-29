@@ -76,6 +76,14 @@ class KRB_ETYPE(enum.Enum):
     AES256_CTS_HMAC_SHA1_96 = 'aes256-cts-hmac-sha1-96'
 
 
+class KerberosModel(sa.Model):
+    __tablename__ = 'directoryservice_kerberossettings'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    ks_appdefaults_aux = sa.Column(sa.Text())
+    ks_libdefaults_aux = sa.Column(sa.Text())
+
+
 class KerberosService(ConfigService):
     class Config:
         service = "kerberos"
@@ -446,6 +454,16 @@ class KerberosService(ConfigService):
             raise CallError(f'Timed out hung kinit after [{kinit_timeout}] seconds')
 
 
+class KerberosRealmModel(sa.Model):
+    __tablename__ = 'directoryservice_kerberosrealm'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    krb_realm = sa.Column(sa.String(120), unique=True)
+    krb_kdc = sa.Column(sa.String(120))
+    krb_admin_server = sa.Column(sa.String(120))
+    krb_kpasswd_server = sa.Column(sa.String(120))
+
+
 class KerberosRealmService(CRUDService):
     class Config:
         datastore = 'directoryservice.kerberosrealm'
@@ -554,6 +572,14 @@ class KerberosRealmService(CRUDService):
             if realm['realm'].upper() == data['realm'].upper():
                 verrors.add(f'kerberos_realm', f'kerberos realm with name {realm["realm"]} already exists.')
         return verrors
+
+
+class KerberosKeytabModel(sa.Model):
+    __tablename__ = 'directoryservice_kerberoskeytab'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    keytab_file = sa.Column(sa.Text())
+    keytab_name = sa.Column(sa.String(120))
 
 
 class KerberosKeytabService(CRUDService):

@@ -8,6 +8,13 @@ from middlewared.service import CRUDService, job, private
 from middlewared.service_exception import CallError
 
 
+class ImageModel(sa.Model):
+    __tablename__ = 'system_filesystem'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    identifier = sa.Column(sa.String(255))
+
+
 class ImageService(CRUDService):
     class Config:
         namespace = 'webui.image'

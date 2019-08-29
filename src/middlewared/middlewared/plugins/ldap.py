@@ -256,6 +256,34 @@ class LDAPQuery(object):
         return self.parse_results(results)
 
 
+class LDAPModel(sa.Model):
+    __tablename__ = 'directoryservice_ldap'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    ldap_hostname = sa.Column(sa.String(120))
+    ldap_sa.Modeldn = sa.Column(sa.String(120))
+    ldap_binddn = sa.Column(sa.String(256))
+    ldap_bindpw = sa.Column(sa.String(120))
+    ldap_anonbind = sa.Column(sa.Boolean())
+    ldap_usersuffix = sa.Column(sa.String(120))
+    ldap_groupsuffix = sa.Column(sa.String(120))
+    ldap_passwordsuffix = sa.Column(sa.String(120))
+    ldap_machinesuffix = sa.Column(sa.String(120))
+    ldap_sudosuffix = sa.Column(sa.String(120))
+    ldap_ssl = sa.Column(sa.String(120))
+    ldap_timeout = sa.Column(sa.Integer())
+    ldap_dns_timeout = sa.Column(sa.Integer())
+    ldap_idmap_backend = sa.Column(sa.String(120))
+    ldap_has_samba_schema = sa.Column(sa.Boolean())
+    ldap_auxiliary_parameters = sa.Column(sa.Text())
+    ldap_schema = sa.Column(sa.String(120))
+    ldap_enable = sa.Column(sa.Boolean())
+    ldap_certificate_id = sa.Column(sa.ForeignKey('system_certificate__old.id'), index=True, nullable=True)
+    ldap_kerberos_realm_id = sa.Column(sa.ForeignKey('directoryservice_kerberosrealm.id'), index=True, nullable=True)
+    ldap_kerberos_principal = sa.Column(sa.String(255))
+    ldap_disable_freenas_cache = sa.Column(sa.Boolean())
+
+
 class LDAPService(ConfigService):
     class Config:
         service = "ldap"

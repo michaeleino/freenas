@@ -213,6 +213,15 @@ def process_ssh_keyscan_output(output):
     return [" ".join(line.split()[1:]) for line in output.split("\n") if line and not line.startswith("# ")][-1]
 
 
+class KeychainCredentialModel(sa.Model):
+    __tablename__ = 'system_keychaincredential'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    name = sa.Column(sa.String(255))
+    type = sa.Column(sa.String(255))
+    attributes = sa.Column(sa.Text())
+
+
 class KeychainCredentialService(CRUDService):
 
     class Config:

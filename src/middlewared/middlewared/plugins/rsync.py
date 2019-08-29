@@ -42,6 +42,14 @@ from middlewared.service import (
 from middlewared.utils import run_command_with_user_context
 
 
+class RsyncdModel(sa.Model):
+    __tablename__ = 'services_rsyncd'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    rsyncd_port = sa.Column(sa.Integer())
+    rsyncd_auxiliary = sa.Column(sa.Text())
+
+
 class RsyncdService(SystemServiceService):
 
     class Config:
@@ -69,6 +77,22 @@ class RsyncdService(SystemServiceService):
         await self._update_service(old, new)
 
         return new
+
+
+class RsyncModModel(sa.Model):
+    __tablename__ = 'services_rsyncmod'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    rsyncmod_name = sa.Column(sa.String(120))
+    rsyncmod_comment = sa.Column(sa.String(120))
+    rsyncmod_path = sa.Column(sa.String(255))
+    rsyncmod_mode = sa.Column(sa.String(120))
+    rsyncmod_maxconn = sa.Column(sa.Integer())
+    rsyncmod_user = sa.Column(sa.String(120))
+    rsyncmod_group = sa.Column(sa.String(120))
+    rsyncmod_hostsallow = sa.Column(sa.Text())
+    rsyncmod_hostsdeny = sa.Column(sa.Text())
+    rsyncmod_auxiliary = sa.Column(sa.Text())
 
 
 class RsyncModService(CRUDService):
@@ -183,6 +207,37 @@ class RsyncModService(CRUDService):
         Delete Rsyncmod module of `id`.
         """
         return await self.middleware.call('datastore.delete', self._config.datastore, id)
+
+
+class RsyncTaskModel(sa.Model):
+    __tablename__ = 'tasks_rsync'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    rsync_path = sa.Column(sa.String(255))
+    rsync_remotehost = sa.Column(sa.String(120))
+    rsync_remotemodule = sa.Column(sa.String(120))
+    rsync_desc = sa.Column(sa.String(120))
+    rsync_minute = sa.Column(sa.String(100))
+    rsync_hour = sa.Column(sa.String(100))
+    rsync_daymonth = sa.Column(sa.String(100))
+    rsync_month = sa.Column(sa.String(100))
+    rsync_dayweek = sa.Column(sa.String(100))
+    rsync_user = sa.Column(sa.String(60))
+    rsync_recursive = sa.Column(sa.Boolean())
+    rsync_times = sa.Column(sa.Boolean())
+    rsync_compress = sa.Column(sa.Boolean())
+    rsync_archive = sa.Column(sa.Boolean())
+    rsync_delete = sa.Column(sa.Boolean())
+    rsync_quiet = sa.Column(sa.Boolean())
+    rsync_preserveperm = sa.Column(sa.Boolean())
+    rsync_preserveattr = sa.Column(sa.Boolean())
+    rsync_extra = sa.Column(sa.Text())
+    rsync_enabled = sa.Column(sa.Boolean())
+    rsync_mode = sa.Column(sa.String(20))
+    rsync_remotepath = sa.Column(sa.String(255))
+    rsync_direction = sa.Column(sa.String(10))
+    rsync_remoteport = sa.Column(sa.SmallInteger())
+    rsync_delayupdates = sa.Column(sa.Boolean())
 
 
 class RsyncTaskService(CRUDService):

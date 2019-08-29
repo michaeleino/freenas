@@ -24,6 +24,26 @@ RE_NAMESERVER = re.compile(r'^nameserver\s+(\S+)', re.M)
 RE_MTU = re.compile(r'\bmtu\s+(\d+)')
 
 
+class NetworkConfigurationModel(sa.Model):
+    __tablename__ = 'network_globalconfiguration'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    gc_hostname = sa.Column(sa.String(120))
+    gc_hostname_b = sa.Column(sa.String(120), nullable=True)
+    gc_domain = sa.Column(sa.String(120))
+    gc_ipv4gateway = sa.Column(sa.String(42))
+    gc_ipv6gateway = sa.Column(sa.String(42))
+    gc_nameserver1 = sa.Column(sa.String(42))
+    gc_nameserver2 = sa.Column(sa.String(42))
+    gc_nameserver3 = sa.Column(sa.String(42))
+    gc_httpproxy = sa.Column(sa.String(255))
+    gc_netwait_enabled = sa.Column(sa.Boolean())
+    gc_netwait_ip = sa.Column(sa.String(300))
+    gc_hosts = sa.Column(sa.Text())
+    gc_domains = sa.Column(sa.Text())
+    gc_hostname_virtual = sa.Column(sa.String(120), nullable=True)
+
+
 class NetworkConfigurationService(ConfigService):
     class Config:
         namespace = 'network.configuration'
@@ -2083,6 +2103,15 @@ class RouteService(Service):
                         if ipaddress.ip_address(ipv4_gateway) in ipv4_nic.network:
                             return True
         return False
+
+
+class StaticRouteModel(sa.Model):
+    __tablename__ = 'network_staticroute'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    sr_destination = sa.Column(sa.String(120))
+    sr_gateway = sa.Column(sa.String(42))
+    sr_description = sa.Column(sa.String(120))
 
 
 class StaticRouteService(CRUDService):

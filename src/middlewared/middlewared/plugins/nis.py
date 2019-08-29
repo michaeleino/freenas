@@ -18,6 +18,17 @@ class DSStatus(enum.Enum):
     HEALTHY = 4
 
 
+class NISModel(sa.Model):
+    __tablename__ = 'directoryservice_nis'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    nis_domain = sa.Column(sa.String(120))
+    nis_servers = sa.Column(sa.String(8192))
+    nis_secure_mode = sa.Column(sa.Boolean())
+    nis_manycast = sa.Column(sa.Boolean())
+    nis_enable = sa.Column(sa.Boolean())
+
+
 class NISService(ConfigService):
     class Config:
         service = "nis"

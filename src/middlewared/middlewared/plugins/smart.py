@@ -100,6 +100,30 @@ def parse_smart_selftest_results(stdout):
         return tests
 
 
+class SmartTestModel(sa.Model):
+    __tablename__ = 'tasks_smarttest'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    smarttest_type = sa.Column(sa.String(2))
+    smarttest_desc = sa.Column(sa.String(120))
+    smarttest_hour = sa.Column(sa.String(100))
+    smarttest_daymonth = sa.Column(sa.String(100))
+    smarttest_month = sa.Column(sa.String(100))
+    smarttest_dayweek = sa.Column(sa.String(100))
+    smarttest_all_disks = sa.Column(sa.Boolean())
+
+
+class SmartTestDiskModel(sa.Model):
+    __tablename__ = 'tasks_smarttest_smarttest_disks'
+    __table_args__ = (
+        Index('tasks_smarttest_smarttest_disks_smarttest_id__disk_id', 'smarttest_id', 'disk_id', unique=True),
+    )
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    smarttest_id = sa.Column(sa.Integer())
+    disk_id = sa.Column(sa.String(100))
+
+
 class SMARTTestService(CRUDService):
 
     class Config:
@@ -506,6 +530,18 @@ class SMARTTestService(CRUDService):
             [],
             {"get": get},
         )
+
+
+class SmartModel(sa.Model):
+    __tablename__ = 'services_smart'
+
+    id = sa.Column(sa.Integer(), primary_key=True)
+    smart_interval = sa.Column(sa.Integer())
+    smart_powermode = sa.Column(sa.String(60))
+    smart_difference = sa.Column(sa.Integer())
+    smart_informational = sa.Column(sa.Integer())
+    smart_critical = sa.Column(sa.Integer())
+    smart_email = sa.Column(sa.String(255))
 
 
 class SmartService(SystemServiceService):
