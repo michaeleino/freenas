@@ -1,4 +1,4 @@
-from django.db import migrations
+from django.db import migrations, models
 
 
 def ensure_vnc_port(apps, schema_editor):
@@ -68,4 +68,9 @@ class Migration(migrations.Migration):
         migrations.RunPython(ensure_vnc_port),
         migrations.RunPython(add_physical_sector_size_support),
         migrations.RunPython(normalize_mac_address),
+        migrations.AddField(
+            model_name='vm',
+            name='shutdown_timeout',
+            field=models.IntegerField(default=90),
+        ),
     ]
